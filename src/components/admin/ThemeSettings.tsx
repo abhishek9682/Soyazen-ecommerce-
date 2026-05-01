@@ -17,6 +17,11 @@ const ThemeSettings = () => {
         contactEmail: 'info@soypure.com',
         contactPhone: '+919876543210',
         whatsappNumber: '919876543210',
+        aboutTitle: 'Our Soy Story',
+        aboutDescription: 'We are committed to providing the purest plant-based nutrition to our community.',
+        mission: 'To revolutionize health through high-quality soy products.',
+        vision: 'To become the global leader in sustainable plant-based nutrition.',
+        aboutImageUrl: '',
     });
 
     useEffect(() => {
@@ -29,6 +34,11 @@ const ThemeSettings = () => {
                 contactEmail: theme.contactEmail || 'info@soypure.com',
                 contactPhone: theme.contactPhone || '+919876543210',
                 whatsappNumber: theme.whatsappNumber || '919876543210',
+                aboutTitle: theme.aboutTitle || 'Our Soy Story',
+                aboutDescription: theme.aboutDescription || 'We are committed to providing the purest plant-based nutrition to our community.',
+                mission: theme.mission || 'To revolutionize health through high-quality soy products.',
+                vision: theme.vision || 'To become the global leader in sustainable plant-based nutrition.',
+                aboutImageUrl: theme.aboutImageUrl || '',
             });
         }
     }, [theme]);
@@ -149,6 +159,74 @@ const ThemeSettings = () => {
                                         className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 font-medium"
                                         placeholder="91..."
                                     />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="h-px bg-gray-50 w-full" />
+
+                        <div className="space-y-10">
+                            <div>
+                                <h3 className="text-xl font-bold text-gray-900 border-l-4 border-primary pl-4 mb-8">Brand Storytelling (About Us)</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="col-span-full">
+                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">About Us Title</label>
+                                        <input
+                                            name="aboutTitle"
+                                            value={formData.aboutTitle}
+                                            onChange={handleChange}
+                                            className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 font-medium"
+                                            placeholder="Our Soy Story"
+                                        />
+                                    </div>
+                                    <div className="col-span-full">
+                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">About Us Narrative</label>
+                                        <textarea
+                                            name="aboutDescription"
+                                            value={formData.aboutDescription}
+                                            onChange={handleChange}
+                                            rows={4}
+                                            className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 font-medium resize-none"
+                                            placeholder="We are committed to..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Our Mission</label>
+                                        <input
+                                            name="mission"
+                                            value={formData.mission}
+                                            onChange={handleChange}
+                                            className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 font-medium"
+                                            placeholder="To revolutionize..."
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Our Vision</label>
+                                        <input
+                                            name="vision"
+                                            value={formData.vision}
+                                            onChange={handleChange}
+                                            className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 font-medium"
+                                            placeholder="To become the global leader..."
+                                        />
+                                    </div>
+                                    <div className="col-span-full">
+                                        <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Storytelling Image URL</label>
+                                        <div className="flex gap-4">
+                                            <input
+                                                name="aboutImageUrl"
+                                                value={formData.aboutImageUrl}
+                                                onChange={handleChange}
+                                                className="flex-1 bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary/20 font-medium"
+                                                placeholder="https://.../about.jpg"
+                                            />
+                                            {formData.aboutImageUrl && (
+                                                <div className="w-16 h-16 rounded-xl overflow-hidden border border-gray-100 flex-shrink-0">
+                                                    <img src={formData.aboutImageUrl} alt="Preview" className="w-full h-full object-cover" />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

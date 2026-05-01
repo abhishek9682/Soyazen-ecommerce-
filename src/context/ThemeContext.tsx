@@ -12,6 +12,11 @@ interface ThemeSettings {
   contactEmail: string;
   contactPhone: string;
   whatsappNumber: string;
+  aboutTitle?: string;
+  aboutDescription?: string;
+  mission?: string;
+  vision?: string;
+  aboutImageUrl?: string;
 }
 
 interface ThemeContextType {

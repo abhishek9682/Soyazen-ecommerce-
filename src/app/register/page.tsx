@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import API from "@/lib/api";
+import Logo from "@/components/layout/Logo";
 
 const RegisterPage = () => {
   const [name, setName] = useState("");
@@ -42,8 +43,8 @@ const RegisterPage = () => {
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="text-3xl font-bold text-green-700">
-            Soy<span className="text-gray-600">Pure</span>
+          <Link href="/" className="flex flex-col items-center group">
+            <Logo className="h-32 w-auto mb-6 transition-transform duration-500 group-hover:scale-110" />
           </Link>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 font-sans tracking-tight">
             Create your account

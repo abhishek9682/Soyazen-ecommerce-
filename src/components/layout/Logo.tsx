@@ -3,38 +3,32 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Logo = ({ className = "h-8 w-auto" }) => {
+const Logo = ({ className = "h-16 w-auto" }) => {
   return (
-    <div className={`flex items-center space-x-2 ${className}`}>
-      <motion.svg
-        viewBox="0 0 100 100"
-        className="h-full w-auto"
-        initial={{ rotate: -10 }}
-        animate={{ rotate: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        {/* Soy Bean Shape */}
-        <ellipse cx="50" cy="65" rx="30" ry="20" fill="currentColor" className="text-primary" />
-        
-        {/* Leaf Shape */}
-        <path
-          d="M50 45 C70 15, 90 35, 50 65 C10 35, 30 15, 50 45"
-          fill="currentColor"
-          className="text-primary opacity-80"
-        />
-        
-        {/* Detail Line */}
-        <path
-          d="M50 45 Q50 65 50 65"
-          stroke="white"
-          strokeWidth="2"
-          strokeLinecap="round"
-        />
-      </motion.svg>
-      <span className="text-2xl font-bold font-sans tracking-tight text-gray-900">
-        Soy<span className="text-primary italic">azen</span>
-      </span>
-    </div>
+    <motion.div 
+      className={`flex items-center ${className}`}
+      initial={{ scale: 0.9, opacity: 0 }}
+      animate={{ 
+        scale: 1, 
+        opacity: 1,
+        y: [0, -5, 0] 
+      }}
+      transition={{
+        y: {
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut"
+        },
+        duration: 0.8
+      }}
+    >
+      <motion.img
+        whileHover={{ scale: 1.05, rotate: 2 }}
+        src="/logo.jpg"
+        alt="Soyazen Logo"
+        className="h-full w-auto object-contain drop-shadow-2xl"
+      />
+    </motion.div>
   );
 };
 

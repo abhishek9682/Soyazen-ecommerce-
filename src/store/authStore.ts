@@ -10,14 +10,14 @@ interface User {
 
 interface AuthState {
   user: any;
-  login: (userData: any) => void;
+  setUser: (userData: any) => void;
   logout: () => void;
   updateProfile: (userData: any) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('userInfo') || 'null') : null,
-  login: (user) => {
+  setUser: (user) => {
     if (user) {
       localStorage.setItem('userInfo', JSON.stringify(user));
     } else {

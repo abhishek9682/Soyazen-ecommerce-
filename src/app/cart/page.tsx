@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingCart, Trash2, Plus, Minus, CreditCard, ChevronRight, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, Trash2, Plus, Minus, CreditCard, ChevronRight, ArrowLeft, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 import Script from 'next/script';
 import { useCartStore } from '@/store/cartStore';
@@ -15,6 +15,7 @@ const CartPage = () => {
   const { user } = useAuthStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'Razorpay' | 'cod'>('cod');
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shipping = subtotal > 500 ? 0 : 50;
@@ -37,12 +38,18 @@ const CartPage = () => {
           postalCode: '123456',
           country: 'India',
         },
-        paymentMethod: 'Razorpay',
+        paymentMethod: paymentMethod,
         itemsPrice: subtotal,
         taxPrice: tax,
         shippingPrice: shipping,
         totalPrice: total,
       });
+
+      if (paymentMethod === 'cod') {
+        clearCart();
+        router.push(`/profile?orderId=${data.order._id}`);
+        return;
+      }
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -123,8 +130,12 @@ const CartPage = () => {
                     exit={{ opacity: 0, x: -20 }}
                     className="flex flex-col sm:flex-row items-center bg-white p-6 rounded-3xl border border-gray-100 group hover:shadow-xl transition-all"
                   >
-                    <div className="w-24 h-24 bg-primary/5 rounded-2xl flex-shrink-0 flex items-center justify-center mb-4 sm:mb-0">
-                      <ShoppingCart className="text-primary/20" size={32} />
+                    <div className="w-24 h-24 bg-gray-50 rounded-2xl flex-shrink-0 overflow-hidden border border-gray-100 flex items-center justify-center mb-4 sm:mb-0">
+                      {item.image ? (
+                        <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                      ) : (
+                        <ShoppingCart className="text-primary/20" size={32} />
+                      )}
                     </div>
                     <div className="sm:ml-6 flex-grow text-center sm:text-left">
                       <h3 className="text-xl font-bold text-gray-900 mb-1">{item.name}</h3>
@@ -184,6 +195,24 @@ const CartPage = () => {
                   <div className="flex justify-between text-xl font-bold">
                     <span>Total</span>
                     <span className="text-primary">₹{total.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <div className="mb-8">
+                  <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Payment Method</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <button 
+                      onClick={() => setPaymentMethod('cod')}
+                      className={`py-3 rounded-xl text-xs font-bold border transition-all ${paymentMethod === 'cod' ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'}`}
+                    >
+                      COD
+                    </button>
+                    <button 
+                      onClick={() => setPaymentMethod('Razorpay')}
+                      className={`py-3 rounded-xl text-xs font-bold border transition-all ${paymentMethod === 'Razorpay' ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20' : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'}`}
+                    >
+                      Razorpay
+                    </button>
                   </div>
                 </div>
 

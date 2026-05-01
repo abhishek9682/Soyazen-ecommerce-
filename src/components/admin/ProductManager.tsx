@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Plus, Search, Edit2, Trash2, X, PlusCircle, CheckCircle2, ShoppingBag } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, X, PlusCircle, CheckCircle2, ShoppingBag, Image as ImageIcon } from 'lucide-react';
 import API from '@/lib/api';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -19,6 +19,7 @@ const ProductManager = () => {
         description: '',
         benefits: '',
         isFeatured: false,
+        image: '',
     });
 
     const fetchProducts = async () => {
@@ -48,7 +49,8 @@ const ProductManager = () => {
           ...formData,
           price: Number(formData.price),
           stock: Number(formData.stock),
-          benefits: formData.benefits.split(',').map(b => b.trim())
+          benefits: formData.benefits.split(',').map(b => b.trim()),
+          images: formData.image ? [formData.image] : []
         };
 
         try {
@@ -59,7 +61,7 @@ const ProductManager = () => {
             }
             setIsFormOpen(false);
             setEditingProduct(null);
-            setFormData({ name: '', title: '', price: '', category: 'tofu', stock: '', weight: '', description: '', benefits: '', isFeatured: false });
+            setFormData({ name: '', title: '', price: '', category: 'tofu', stock: '', weight: '', description: '', benefits: '', isFeatured: false, image: '' });
             fetchProducts();
         } catch (error) {
             console.error('Failed to save product', error);
@@ -78,6 +80,7 @@ const ProductManager = () => {
             description: product.description || '',
             benefits: (product.benefits || []).join(', '),
             isFeatured: !!product.isFeatured,
+            image: product.images?.[0] || '',
         });
         setIsFormOpen(true);
     };
@@ -127,8 +130,12 @@ const ProductManager = () => {
                                 <tr key={product._id} className="hover:bg-gray-50/50 transition-colors group">
                                     <td className="px-10 py-8">
                                         <div className="flex items-center space-x-6">
-                                            <div className="w-16 h-16 bg-primary/5 rounded-3xl flex items-center justify-center text-primary/30 group-hover:bg-primary/10 transition-colors">
-                                                <ShoppingBag size={28} />
+                                            <div className="w-16 h-16 bg-primary/5 rounded-3xl flex items-center justify-center overflow-hidden group-hover:bg-primary/10 transition-colors">
+                                                {product.images?.[0] ? (
+                                                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <ShoppingBag size={28} className="text-primary/30" />
+                                                )}
                                             </div>
                                             <div>
                                                 <div className="font-bold text-gray-900 text-lg leading-none mb-1">{product.name}</div>
@@ -211,6 +218,25 @@ const ProductManager = () => {
                                             className="w-full bg-gray-50 border-none rounded-3xl px-8 py-5 focus:ring-4 focus:ring-primary/10 transition-all font-bold text-gray-900"
                                             placeholder="e.g., Organic Stone-Pressed Tofu"
                                         />
+                                    </div>
+                                    <div className="col-span-full">
+                                        <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 ml-2">Product Image URL</label>
+                                        <div className="flex gap-4">
+                                            <div className="flex-1">
+                                                <input
+                                                    name="image"
+                                                    value={formData.image}
+                                                    onChange={handleChange}
+                                                    className="w-full bg-gray-50 border-none rounded-3xl px-8 py-5 focus:ring-4 focus:ring-primary/10 transition-all font-bold text-gray-900"
+                                                    placeholder="Paste image URL here (e.g., https://.../product.jpg)"
+                                                />
+                                            </div>
+                                            {formData.image && (
+                                                <div className="w-20 h-20 rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex-shrink-0">
+                                                    <img src={formData.image} alt="Preview" className="w-full h-full object-cover" />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <div>
                                         <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 ml-2">Title / Tagline</label>

@@ -1,37 +1,49 @@
 'use client';
 
 import React from 'react';
-import { LayoutDashboard, ShoppingBag, Palette, ChevronRight, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, ShoppingBag, Palette, ChevronRight, LogOut, Users, ShoppingCart, MessageSquare, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Logo from '../layout/Logo';
+import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'next/navigation';
 
 interface AdminSidebarProps {
     activeTab: string;
     setActiveTab: (tab: string) => void;
+    unreadMessages?: number;
 }
 
-const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActiveTab }) => {
+const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActiveTab, unreadMessages = 0 }) => {
+    const { logout } = useAuthStore();
+    const router = useRouter();
+
     const menuItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
-        { id: 'products', label: 'Products', icon: <ShoppingBag size={20} /> },
-        { id: 'theme', label: 'Theme Settings', icon: <Palette size={20} /> },
-        { id: 'settings', label: 'General Settings', icon: <Settings size={20} /> },
+        { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} />, badge: null },
+        { id: 'orders', label: 'Orders', icon: <ShoppingCart size={20} />, badge: null },
+        { id: 'products', label: 'Products', icon: <ShoppingBag size={20} />, badge: null },
+        { id: 'customers', label: 'Customers', icon: <Users size={20} />, badge: null },
+        { id: 'messages', label: 'Messages', icon: <MessageSquare size={20} />, badge: unreadMessages > 0 ? unreadMessages : null },
+        { id: 'theme', label: 'Theme Settings', icon: <Palette size={20} />, badge: null },
     ];
 
+    const handleLogout = () => {
+        logout();
+        router.push('/login');
+    };
+
     return (
-        <div className="w-64 bg-gray-900 h-full fixed left-0 top-0 text-white p-6 flex flex-col">
-            <div className="mb-12 px-2">
-                <h2 className="text-2xl font-bold font-sans tracking-tight">
-                    Soy<span className="text-primary italic">azen</span> Admin
-                </h2>
-                <p className="text-gray-500 text-[10px] uppercase font-bold tracking-[0.2em] mt-1">Management Portal</p>
+        <div className="w-64 bg-gray-900 h-full fixed left-0 top-0 text-white p-6 flex flex-col z-50 shadow-2xl">
+            <div className="mb-10 px-2 flex flex-col items-center">
+                <Logo className="h-28 w-auto mb-4 invert brightness-200" />
+                <p className="text-gray-500 text-[10px] uppercase font-bold tracking-[0.2em]">Admin Console</p>
             </div>
 
-            <nav className="flex-grow space-y-2">
+            <nav className="flex-grow space-y-1">
                 {menuItems.map((item) => (
                     <button
                         key={item.id}
                         onClick={() => setActiveTab(item.id)}
-                        className={`w-full flex items-center justify-between px-4 py-4 rounded-2xl transition-all duration-300 ${
+                        className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 ${
                             activeTab === item.id 
                                 ? 'bg-primary text-white shadow-lg shadow-primary/20' 
                                 : 'text-gray-400 hover:text-white hover:bg-white/5'
@@ -39,17 +51,27 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({ activeTab, setActiveTab }) 
                     >
                         <div className="flex items-center space-x-3">
                             {item.icon}
-                            <span className="font-bold text-sm tracking-wide">{item.label}</span>
+                            <span className="font-semibold text-sm tracking-wide">{item.label}</span>
                         </div>
-                        {activeTab === item.id && <ChevronRight size={14} />}
+                        <div className="flex items-center space-x-2">
+                            {item.badge && (
+                                <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+                                    {item.badge}
+                                </span>
+                            )}
+                            {activeTab === item.id && <ChevronRight size={14} />}
+                        </div>
                     </button>
                 ))}
             </nav>
 
             <div className="mt-auto pt-6 border-t border-white/5">
-                <button className="w-full flex items-center space-x-3 px-4 py-4 text-red-400 hover:bg-red-500/10 rounded-2xl transition-all">
+                <button 
+                    onClick={handleLogout}
+                    className="w-full flex items-center space-x-3 px-4 py-3.5 text-red-400 hover:bg-red-500/10 rounded-xl transition-all"
+                >
                     <LogOut size={20} />
-                    <span className="font-bold text-sm">Logout</span>
+                    <span className="font-semibold text-sm">Logout</span>
                 </button>
             </div>
         </div>
